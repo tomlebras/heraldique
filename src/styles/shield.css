@@ -1,0 +1,10 @@
+/* Shield SVG styling */
+.exercise-shield {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0;
+}
+
+.exercise-shield svg {
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
