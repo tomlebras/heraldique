@@ -68,22 +68,16 @@ const BLASONS_HISTORIQUES: { nom: string; blason: Blason; description: string }[
 export function genererExercicesNiveau5(): Exercice[] {
   const exercices: Exercice[] = [];
 
-  // Type 1 : Identifier le blason historique
+  // Type 1 : Identifier le blason historique (texte libre)
   for (const bh of BLASONS_HISTORIQUES) {
-    const autresNoms = melanger(
-      BLASONS_HISTORIQUES.filter((b) => b.nom !== bh.nom)
-    ).slice(0, 3).map((b) => b.nom);
-    const choix = melanger([bh.nom, ...autresNoms]);
-
     exercices.push({
       id: `n5-historique-${bh.nom.replace(/\s/g, '-').toLowerCase()}`,
       niveau: 5,
-      mode: 'qcm',
+      mode: 'identification',
       question: 'À qui appartiennent ces armoiries ?',
-      choix,
       reponse: bh.nom,
       blason: bh.blason,
-      indice: bh.description,
+      indice: 'Ex : Royaume de France, Normandie, Bretagne…',
     });
   }
 

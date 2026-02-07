@@ -1,6 +1,6 @@
 /** Types du système de jeu */
 
-export type ModeExercice = 'qcm' | 'blasonnement' | 'construction';
+export type ModeExercice = 'qcm' | 'identification' | 'blasonnement' | 'construction';
 
 export interface Exercice {
   id: string;

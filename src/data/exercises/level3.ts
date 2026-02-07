@@ -8,20 +8,16 @@ import { blasonner } from '../../engine/blazon';
 export function genererExercicesNiveau3(): Exercice[] {
   const exercices: Exercice[] = [];
 
-  // Type 1 : Identifier la pièce (QCM)
+  // Type 1 : Identifier la pièce (texte libre)
   for (const piece of PIECES) {
     const metal = melanger(EMAUX.filter((e) => e.type === 'metal'))[0];
     const couleur = melanger(EMAUX.filter((e) => e.type === 'couleur'))[0];
 
-    const autresPieces = melanger(PIECES.filter((p) => p.id !== piece.id)).slice(0, 3);
-    const choix = melanger([piece, ...autresPieces].map((p) => p.nom));
-
     exercices.push({
       id: `n3-identifier-${piece.id}`,
       niveau: 3,
-      mode: 'qcm',
+      mode: 'identification',
       question: 'Quelle est cette pièce honorable ?',
-      choix,
       reponse: piece.nom,
       blason: {
         partition: 'plein',
@@ -29,6 +25,7 @@ export function genererExercicesNiveau3(): Exercice[] {
         piece: { id: piece.id, email: metal.id },
         meubles: [],
       },
+      indice: 'Ex : Fasce, Pal, Bande, Chevron, Croix…',
     });
   }
 
@@ -63,18 +60,15 @@ export function genererExercicesNiveau3(): Exercice[] {
     });
   }
 
-  // Type 3 : Description → identifier la pièce
+  // Type 3 : Description → identifier la pièce (texte libre)
   for (const piece of PIECES) {
-    const autresPieces = melanger(PIECES.filter((p) => p.id !== piece.id)).slice(0, 3);
-    const choix = melanger([piece, ...autresPieces].map((p) => p.nom));
-
     exercices.push({
       id: `n3-description-${piece.id}`,
       niveau: 3,
-      mode: 'qcm',
+      mode: 'identification',
       question: `Quelle pièce correspond à cette description : « ${piece.description} » ?`,
-      choix,
       reponse: piece.nom,
+      indice: 'Ex : Fasce, Pal, Bande, Chevron…',
     });
   }
 

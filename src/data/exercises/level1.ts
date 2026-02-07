@@ -6,36 +6,33 @@ import { melanger } from '../../engine/generator';
 export function genererExercicesNiveau1(): Exercice[] {
   const exercices: Exercice[] = [];
 
-  // Type 1 : Identifier l'émail par sa couleur (QCM)
+  // Type 1 : Identifier l'émail par sa couleur (texte libre)
   for (const email of EMAUX) {
-    const autresEmaux = melanger(EMAUX.filter((e) => e.id !== email.id)).slice(0, 3);
-    const choix = melanger([email, ...autresEmaux].map((e) => e.nom));
-
     exercices.push({
       id: `n1-identifier-${email.id}`,
       niveau: 1,
-      mode: 'qcm',
-      question: `Quel est le nom de cet émail ?`,
-      choix,
+      mode: 'identification',
+      question: 'Quel est le nom de cet émail ?',
       reponse: email.nom,
       blason: { partition: 'plein', emaux: [email.id], meubles: [] },
+      indice: 'Ex : Or, Argent, Gueules, Azur…',
     });
   }
 
-  // Type 2 : Identifier le type (métal ou couleur)
+  // Type 2 : Identifier le type (métal ou couleur) — texte libre
   for (const email of EMAUX) {
     exercices.push({
       id: `n1-type-${email.id}`,
       niveau: 1,
-      mode: 'qcm',
-      question: `L'émail « ${email.nom} » est-il un métal ou une couleur ?`,
-      choix: ['Métal', 'Couleur'],
+      mode: 'identification',
+      question: `« ${email.nom} » est-il un métal ou une couleur ?`,
       reponse: email.type === 'metal' ? 'Métal' : 'Couleur',
       blason: { partition: 'plein', emaux: [email.id], meubles: [] },
+      indice: 'Métal ou Couleur',
     });
   }
 
-  // Type 3 : Règle des émaux
+  // Type 3 : Règle des émaux — QCM (oui/non)
   const pairesValides = [
     ['or', 'gueules'], ['or', 'azur'], ['argent', 'sinople'], ['argent', 'sable'],
   ];

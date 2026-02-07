@@ -3,7 +3,9 @@ import { useGame } from '../../context/GameContext';
 import { genererExercices } from '../../engine/exerciseEngine';
 import type { Exercice } from '../../types/game';
 import IdentifyMode from './IdentifyMode';
+import FreeTextMode from './FreeTextMode';
 import DescribeMode from './DescribeMode';
+import BuildMode from './BuildMode';
 import ScoreBar from './ScoreBar';
 
 interface Props {
@@ -97,8 +99,24 @@ export default function ExerciseView({ onRetour }: Props) {
         />
       )}
 
+      {exercice.mode === 'identification' && (
+        <FreeTextMode
+          key={exercice.id}
+          exercice={exercice}
+          onReponse={handleReponse}
+        />
+      )}
+
       {exercice.mode === 'blasonnement' && (
         <DescribeMode
+          key={exercice.id}
+          exercice={exercice}
+          onReponse={handleReponse}
+        />
+      )}
+
+      {exercice.mode === 'construction' && (
+        <BuildMode
           key={exercice.id}
           exercice={exercice}
           onReponse={handleReponse}

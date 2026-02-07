@@ -9,7 +9,7 @@ export function genererExercicesNiveau2(): Exercice[] {
   const exercices: Exercice[] = [];
   const partitionsJouables = PARTITIONS.filter((p) => p.id !== 'plein');
 
-  // Type 1 : Identifier la partition (QCM)
+  // Type 1 : Identifier la partition (texte libre)
   for (const partition of partitionsJouables) {
     const metal = melanger(EMAUX.filter((e) => e.type === 'metal'))[0];
     const couleur = melanger(EMAUX.filter((e) => e.type === 'couleur'))[0];
@@ -18,21 +18,18 @@ export function genererExercicesNiveau2(): Exercice[] {
       i % 2 === 0 ? metal.id : couleur.id
     );
 
-    const autresPartitions = melanger(partitionsJouables.filter((p) => p.id !== partition.id)).slice(0, 3);
-    const choix = melanger([partition, ...autresPartitions].map((p) => p.nom));
-
     exercices.push({
       id: `n2-identifier-${partition.id}`,
       niveau: 2,
-      mode: 'qcm',
+      mode: 'identification',
       question: 'Comment s\'appelle cette partition ?',
-      choix,
       reponse: partition.nom,
       blason: { partition: partition.id as IdPartition, emaux, meubles: [] },
+      indice: 'Ex : Parti, Coupé, Tranché, Écartelé…',
     });
   }
 
-  // Type 2 : Blasonner une partition simple (QCM avec textes)
+  // Type 2 : Blasonner une partition simple (texte libre)
   const combinaisons = [
     { partition: 'parti' as IdPartition, emaux: ['or', 'gueules'] },
     { partition: 'coupe' as IdPartition, emaux: ['azur', 'argent'] },
@@ -53,33 +50,26 @@ export function genererExercicesNiveau2(): Exercice[] {
       bonneReponse = `${p.nom}, d'${e1.nom.toLowerCase()} et d'${e2.nom.toLowerCase()}`;
     }
 
-    // Générer des mauvaises réponses
-    const faux1 = `${p.nom}, d'${e2.nom.toLowerCase()} et d'${e1.nom.toLowerCase()}`; // émaux inversés
-    const autreP = melanger(PARTITIONS.filter((pp) => pp.id !== combo.partition && pp.id !== 'plein'))[0];
-    const faux2 = `${autreP.nom}, d'${e1.nom.toLowerCase()} et d'${e2.nom.toLowerCase()}`; // mauvaise partition
-    const autreE = melanger(EMAUX.filter((e) => e.id !== combo.emaux[0] && e.id !== combo.emaux[1]))[0];
-    const faux3 = `${p.nom}, d'${e1.nom.toLowerCase()} et d'${autreE.nom.toLowerCase()}`; // mauvais émail
-
     exercices.push({
       id: `n2-blasonner-${combo.partition}-${combo.emaux.join('-')}`,
       niveau: 2,
-      mode: 'qcm',
-      question: 'Quel est le blasonnement correct de cet écu ?',
-      choix: melanger([bonneReponse, faux1, faux2, faux3]),
+      mode: 'blasonnement',
+      question: 'Blasonnez cet écu (décrivez sa partition et ses émaux).',
       reponse: bonneReponse,
       blason: { partition: combo.partition, emaux: combo.emaux, meubles: [] },
+      indice: `L'écu est ${p.nom.toLowerCase()}.`,
     });
   }
 
-  // Type 3 : Description → blason correct
+  // Type 3 : Description → partition (texte libre)
   for (const partition of partitionsJouables.slice(0, 5)) {
     exercices.push({
       id: `n2-description-${partition.id}`,
       niveau: 2,
-      mode: 'qcm',
+      mode: 'identification',
       question: `Quelle partition divise l'écu ainsi : « ${partition.description} » ?`,
-      choix: melanger(partitionsJouables.slice(0, 5).map((p) => p.nom)),
       reponse: partition.nom,
+      indice: 'Ex : Parti, Coupé, Tranché…',
     });
   }
 

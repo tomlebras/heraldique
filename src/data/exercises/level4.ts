@@ -9,13 +9,10 @@ import { blasonner } from '../../engine/blazon';
 export function genererExercicesNiveau4(): Exercice[] {
   const exercices: Exercice[] = [];
 
-  // Type 1 : Identifier le meuble (QCM)
+  // Type 1 : Identifier le meuble (texte libre)
   for (const meuble of MEUBLES) {
     const couleur = melanger(EMAUX.filter((e) => e.type === 'couleur'))[0];
     const metal = melanger(EMAUX.filter((e) => e.type === 'metal'))[0];
-
-    const autresMeubles = melanger(MEUBLES.filter((m) => m.id !== meuble.id)).slice(0, 3);
-    const choix = melanger([meuble, ...autresMeubles].map((m) => m.nom));
 
     const meublePose: MeublePose = {
       meuble: meuble.id as IdMeuble,
@@ -26,15 +23,15 @@ export function genererExercicesNiveau4(): Exercice[] {
     exercices.push({
       id: `n4-identifier-${meuble.id}`,
       niveau: 4,
-      mode: 'qcm',
+      mode: 'identification',
       question: 'Quel est ce meuble héraldique ?',
-      choix,
       reponse: meuble.nom,
       blason: {
         partition: 'plein',
         emaux: [couleur.id],
         meubles: [meublePose],
       },
+      indice: 'Ex : Lion, Aigle, Fleur de lys, Étoile…',
     });
   }
 
@@ -104,6 +101,37 @@ export function genererExercicesNiveau4(): Exercice[] {
       question: 'Blasonnez cet écu composé.',
       reponse: blasonner(blason),
       blason,
+    });
+  }
+
+  // Type 4 : Mode construction — assembler le blason décrit
+  const constructions = [
+    {
+      description: 'Construisez : « Parti, d\'or et de gueules »',
+      blason: { partition: 'parti' as const, emaux: ['or', 'gueules'], meubles: [] },
+    },
+    {
+      description: 'Construisez : « Coupé, d\'azur et d\'argent »',
+      blason: { partition: 'coupe' as const, emaux: ['azur', 'argent'], meubles: [] },
+    },
+    {
+      description: 'Construisez : « Tranché, d\'argent et de sinople »',
+      blason: { partition: 'tranche' as const, emaux: ['argent', 'sinople'], meubles: [] },
+    },
+    {
+      description: 'Construisez : « Écartelé, d\'or et d\'azur »',
+      blason: { partition: 'ecartele' as const, emaux: ['or', 'azur', 'or', 'azur'], meubles: [] },
+    },
+  ];
+
+  for (const c of constructions) {
+    exercices.push({
+      id: `n4-construction-${c.blason.partition}`,
+      niveau: 4,
+      mode: 'construction',
+      question: c.description,
+      reponse: blasonner(c.blason),
+      blason: c.blason,
     });
   }
 
