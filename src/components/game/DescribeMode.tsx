@@ -21,6 +21,13 @@ export default function DescribeMode({ exercice, onReponse }: Props) {
     setResultat(correct);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey && texte.trim()) {
+      e.preventDefault();
+      handleValider();
+    }
+  };
+
   const handleSuivant = () => {
     onReponse(texte, resultat ?? false);
     setTexte('');
@@ -44,7 +51,8 @@ export default function DescribeMode({ exercice, onReponse }: Props) {
             <textarea
               value={texte}
               onChange={(e) => setTexte(e.target.value)}
-              placeholder="Ex: D'azur, à la fasce d'or…"
+              onKeyDown={handleKeyDown}
+              placeholder="Décrivez le blason…"
               rows={3}
             />
             <div className="describe-actions">
@@ -75,6 +83,7 @@ export default function DescribeMode({ exercice, onReponse }: Props) {
       <AnswerFeedback
         correct={resultat}
         bonneReponse={exercice.reponse}
+        reponseUtilisateur={texte}
         onSuivant={handleSuivant}
       />
     </div>

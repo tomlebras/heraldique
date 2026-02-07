@@ -32,9 +32,9 @@ body {
 }
 
 .app {
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
 }
 
 .app-main {
@@ -51,7 +51,7 @@ body {
 }
 
 .header-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   cursor: pointer;
   background: linear-gradient(135deg, var(--gold), #FFA500);
@@ -70,9 +70,9 @@ body {
   border: none;
   color: var(--text-muted);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
-  padding: 8px 16px;
+  padding: 10px 18px;
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all 0.2s;
@@ -141,51 +141,52 @@ body {
 
 /* Reference */
 .reference {
-  max-width: 800px;
+  max-width: 1060px;
   margin: 0 auto;
 }
 
 .reference h2 {
-  font-size: 24px;
-  margin-bottom: 32px;
-}
-
-.ref-section {
+  font-size: 32px;
   margin-bottom: 40px;
 }
 
+.ref-section {
+  margin-bottom: 56px;
+}
+
 .ref-section h3 {
-  font-size: 18px;
-  margin-bottom: 12px;
+  font-size: 22px;
+  margin-bottom: 16px;
   color: var(--primary);
 }
 
 .ref-intro {
   color: var(--text-muted);
-  margin-bottom: 16px;
-  font-size: 14px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  line-height: 1.65;
 }
 
 .ref-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
 }
 
 .ref-card {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 12px;
+  border-radius: var(--radius);
+  padding: 16px;
 }
 
 .ref-color-swatch {
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
   border: 2px solid var(--border);
   flex-shrink: 0;
 }
@@ -193,33 +194,171 @@ body {
 .ref-card-info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .ref-card-info strong {
-  font-size: 14px;
+  font-size: 17px;
 }
 
 .ref-type {
   font-size: 12px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-weight: 500;
+  width: fit-content;
+}
+
+.ref-type-metal {
+  background: rgba(255, 215, 0, 0.12);
+  color: #FFD700;
+}
+
+.ref-type-couleur {
+  background: rgba(79, 70, 229, 0.12);
+  color: #818cf8;
+}
+
+.ref-type-fourrure {
+  background: rgba(168, 130, 80, 0.12);
+  color: #d4a853;
 }
 
 .ref-desc {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-muted);
-  line-height: 1.4;
+  line-height: 1.55;
 }
 
 .ref-mini-shield {
-  width: 64px;
-  height: 77px;
+  width: 140px;
+  height: 168px;
   flex-shrink: 0;
 }
 
 .ref-mini-shield svg {
-  max-width: 64px;
-  max-height: 77px;
+  max-width: 140px;
+  max-height: 168px;
+}
+
+/* Heraldry term tooltips */
+.heraldry-term {
+  position: relative;
+  display: inline;
+  border-bottom: 1px dotted var(--text-muted);
+  cursor: help;
+}
+
+.heraldry-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e2030;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  width: 280px;
+  z-index: 100;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.heraldry-tooltip strong {
+  font-size: 14px;
+  color: var(--text);
+  text-transform: capitalize;
+}
+
+.heraldry-tooltip span {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Shield blazonnement tooltip */
+.shield-tooltip-wrap {
+  position: relative;
+}
+
+.shield-tooltip-wrap:hover .shield-tooltip {
+  display: flex;
+}
+
+.shield-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e2030;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  z-index: 100;
+  pointer-events: none;
+  white-space: nowrap;
+  font-size: 13px;
+  color: var(--gold);
+  font-style: italic;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Meuble terminology section */
+.ref-terminology {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.ref-term-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.ref-term-shield {
+  flex-shrink: 0;
+  width: 140px;
+}
+
+.ref-term-shield svg {
+  max-width: 140px;
+  max-height: 168px;
+}
+
+.ref-term-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.ref-term-card h5 {
+  font-size: 17px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.ref-term-card p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.ref-term-example {
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--gold);
+  background: rgba(255, 215, 0, 0.08);
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-top: 10px;
+  display: inline-block;
 }

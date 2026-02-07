@@ -6,10 +6,10 @@ const CLE_STORAGE = 'heraldique-progression';
 
 const NIVEAUX_INITIAUX: ProgressionNiveau[] = [
   { niveau: 1, debloque: true, exercicesFaits: 0, exercicesReussis: 0, meilleurStreak: 0 },
-  { niveau: 2, debloque: false, exercicesFaits: 0, exercicesReussis: 0, meilleurStreak: 0 },
-  { niveau: 3, debloque: false, exercicesFaits: 0, exercicesReussis: 0, meilleurStreak: 0 },
-  { niveau: 4, debloque: false, exercicesFaits: 0, exercicesReussis: 0, meilleurStreak: 0 },
-  { niveau: 5, debloque: false, exercicesFaits: 0, exercicesReussis: 0, meilleurStreak: 0 },
+  { niveau: 2, debloque: true, exercicesFaits: 0, exercicesReussis: 0, meilleurStreak: 0 },
+  { niveau: 3, debloque: true, exercicesFaits: 0, exercicesReussis: 0, meilleurStreak: 0 },
+  { niveau: 4, debloque: true, exercicesFaits: 0, exercicesReussis: 0, meilleurStreak: 0 },
+  { niveau: 5, debloque: true, exercicesFaits: 0, exercicesReussis: 0, meilleurStreak: 0 },
 ];
 
 const ETAT_INITIAL: EtatJeu = {
