@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from '@dnd-kit/core';
+import { DndContext, DragOverlay } from '@dnd-kit/core';
+import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 import type { Exercice } from '../../types/game';
 import type { Blason, IdPartition } from '../../types/heraldry';
 import { EMAUX } from '../../data/tinctures';
