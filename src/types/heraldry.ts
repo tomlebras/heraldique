@@ -48,6 +48,7 @@ export interface Piece {
 
 export type IdMeuble =
   | 'lion'
+  | 'lionceau'
   | 'leopard'
   | 'aigle'
   | 'fleur-de-lys'
