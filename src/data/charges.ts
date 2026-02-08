@@ -85,10 +85,10 @@ export function getMeuble(id: string): Meuble | undefined {
 export function getPositionPixels(position: string): { x: number; y: number } {
   switch (position) {
     case 'en-coeur': return { x: 300, y: 330 };
-    case 'en-chef': return { x: 300, y: 160 };
-    case 'en-pointe': return { x: 300, y: 560 };
-    case 'en-canton-dextre-du-chef': return { x: 150, y: 160 };
-    case 'en-canton-senestre-du-chef': return { x: 450, y: 160 };
+    case 'en-chef': return { x: 300, y: 200 };
+    case 'en-pointe': return { x: 300, y: 500 };
+    case 'en-canton-dextre-du-chef': return { x: 180, y: 220 };
+    case 'en-canton-senestre-du-chef': return { x: 420, y: 220 };
     default: return { x: 300, y: 330 };
   }
 }

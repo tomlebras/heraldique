@@ -3,7 +3,10 @@ import { PARTITIONS, getClipPaths } from '../../data/partitions';
 import { PIECES, getPiecePath } from '../../data/ordinaries';
 import { MEUBLES, getMeublePath } from '../../data/charges';
 import { GLOSSARY, findTerm } from '../../data/glossary';
+import { BLASONS_HISTORIQUES } from '../../data/exercises/level5';
+import { blasonner } from '../../engine/blazon';
 import Shield from '../svg/Shield';
+import CoatOfArmsRenderer from '../svg/CoatOfArmsRenderer';
 import HeraldryTooltip from './HeraldryTooltip';
 
 const SVG_CHARGES = new Set([
@@ -595,6 +598,27 @@ export default function ReferenceCards() {
               <p>Se dit d'un arbre dont les racines sont visibles, ou d'une tête séparée du corps de façon irrégulière.</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Blasons historiques */}
+      <section className="ref-section">
+        <h3>Blasons historiques</h3>
+        <p className="ref-intro">
+          Quelques armoiries célèbres de l'histoire de France.
+        </p>
+        <div className="ref-grid ref-meubles">
+          {BLASONS_HISTORIQUES.map((bh) => (
+            <div key={bh.nom} className="ref-card">
+              <ShieldWithTooltip blazon={blasonner(bh.blason)}>
+                <CoatOfArmsRenderer blason={bh.blason} />
+              </ShieldWithTooltip>
+              <div className="ref-card-info">
+                <strong>{bh.nom}</strong>
+                <span className="ref-desc">{bh.description}</span>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
     </div>

@@ -4,7 +4,7 @@ import { melanger } from '../../engine/generator';
 import { blasonner } from '../../engine/blazon';
 
 /** Blasons historiques français */
-const BLASONS_HISTORIQUES: { nom: string; blason: Blason; description: string }[] = [
+export const BLASONS_HISTORIQUES: { nom: string; blason: Blason; description: string }[] = [
   {
     nom: 'Royaume de France',
     description: 'Les armes du Royaume de France (France moderne)',
@@ -12,8 +12,8 @@ const BLASONS_HISTORIQUES: { nom: string; blason: Blason; description: string }[
       partition: 'plein',
       emaux: ['azur'],
       meubles: [
-        { meuble: 'fleur-de-lys' as IdMeuble, email: 'or', position: 'en-chef' },
         { meuble: 'fleur-de-lys' as IdMeuble, email: 'or', position: 'en-canton-dextre-du-chef' },
+        { meuble: 'fleur-de-lys' as IdMeuble, email: 'or', position: 'en-canton-senestre-du-chef' },
         { meuble: 'fleur-de-lys' as IdMeuble, email: 'or', position: 'en-pointe' },
       ],
     },
