@@ -92,7 +92,7 @@ function TermShield({ chargeId, blazon, mirror, clipBottom, pair, coupe, variant
     if (pair) {
       const s = 190;
       const gap = 20;
-      const svgHref = `/charges/${variantSvg ?? chargeId}.svg`;
+      const svgHref = `${import.meta.env.BASE_URL}charges/${variantSvg ?? chargeId}.svg`;
       // Centrer la paire : total = s + gap + s, offset = (600 - total) / 2
       const leftX = (600 - s * 2 - gap) / 2;
       const rightX = leftX + s + gap;
@@ -126,7 +126,7 @@ function TermShield({ chargeId, blazon, mirror, clipBottom, pair, coupe, variant
       return (
         <g transform={mirror ? 'translate(600, 0) scale(-1, 1)' : undefined} clipPath={clipId ? `url(#${clipId})` : undefined}>
           <image
-            href={`/charges/${svgFile}.svg`}
+            href={`${import.meta.env.BASE_URL}charges/${svgFile}.svg`}
             x={layout.x} y={layout.y} width={layout.w} height={layout.h}
             preserveAspectRatio="xMidYMid meet"
           />
@@ -428,7 +428,7 @@ export default function ReferenceCards() {
                     <rect width={600} height={720} fill="#0055A4" />
                     {SVG_CHARGES.has(meuble.id) ? (
                       <image
-                        href={`/charges/${svgFile}.svg`}
+                        href={`${import.meta.env.BASE_URL}charges/${svgFile}.svg`}
                         x={offset}
                         y={yOffset}
                         width={chargeSize}

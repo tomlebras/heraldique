@@ -32,7 +32,7 @@ export default function ChargeShape({ meuble }: Props) {
     const chargeSize = CHARGE_SIZE[meuble.meuble] ?? size;
     return (
       <image
-        href={`/charges/${svgFile}.svg`}
+        href={`${import.meta.env.BASE_URL}charges/${svgFile}.svg`}
         x={pos.x - chargeSize / 2}
         y={pos.y - chargeSize / 2}
         width={chargeSize}
