@@ -62,6 +62,7 @@ export default function IdentifyMode({ exercice, onReponse }: Props) {
       <AnswerFeedback
         correct={resultat}
         bonneReponse={exercice.reponse}
+        reponseUtilisateur={selection ?? undefined}
         onSuivant={handleSuivant}
       />
     </div>

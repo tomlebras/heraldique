@@ -247,6 +247,19 @@
   font-size: 14px;
 }
 
+.feedback-user-answer {
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+.feedback-answer-correct {
+  color: var(--success);
+}
+
+.feedback-answer-wrong {
+  color: var(--error);
+}
+
 .feedback-reponse {
   margin-top: 4px;
   font-size: 13px;
@@ -460,4 +473,231 @@
   justify-content: center;
   gap: 8px;
   margin-top: 12px;
+}
+
+/* Settings View */
+.settings-view {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.settings-view h2 {
+  font-size: 28px;
+  margin-bottom: 32px;
+}
+
+.settings-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 16px;
+}
+
+.settings-section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.settings-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.settings-section h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.settings-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+  line-height: 1.55;
+}
+
+.settings-stats {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.settings-stat {
+  flex: 1;
+  min-width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 8px;
+  background: var(--bg-hover);
+  border-radius: var(--radius-sm);
+}
+
+.settings-stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.settings-stat-xp {
+  color: var(--gold);
+}
+
+.settings-stat-success {
+  color: var(--success);
+}
+
+.settings-stat-streak {
+  color: var(--warning);
+}
+
+.settings-stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.settings-levels {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-level-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.settings-level-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  width: 72px;
+  flex-shrink: 0;
+}
+
+.settings-level-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--bg-hover);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.settings-level-fill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+  min-width: 0;
+}
+
+.settings-level-count {
+  font-size: 12px;
+  color: var(--text-muted);
+  width: 48px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.settings-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.settings-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settings-btn-icon svg {
+  flex-shrink: 0;
+}
+
+.settings-danger {
+  border-color: rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.03);
+}
+
+.settings-danger h3 {
+  color: var(--error);
+}
+
+.settings-confirm-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--error);
+}
+
+.settings-message {
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  animation: settings-msg-in 0.3s ease;
+}
+
+@keyframes settings-msg-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.settings-message-success {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: var(--success);
+}
+
+.settings-message-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--error);
+}
+
+.btn-danger {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--error);
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
+}
+
+.btn-danger-outline {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  background: transparent;
+  color: var(--error);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-danger-outline:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.6);
 }

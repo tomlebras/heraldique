@@ -2,10 +2,10 @@ import { useGame } from '../../context/GameContext';
 
 const NOMS_NIVEAUX = [
   '',
-  'Les Émaux',
-  'Les Partitions',
-  'Les Pièces honorables',
-  'Les Meubles',
+  'Les émaux',
+  'Les partitions',
+  'Les pièces honorables',
+  'Les meubles',
   'Avancé',
 ];
 

@@ -3,6 +3,7 @@ import type { IdPartition } from '../../types/heraldry';
 import { EMAUX } from '../tinctures';
 import { PARTITIONS } from '../partitions';
 import { melanger } from '../../engine/generator';
+import { blasonner } from '../../engine/blazon';
 
 /** Génère les exercices du niveau 2 : partitions */
 export function genererExercicesNiveau2(): Exercice[] {
@@ -14,9 +15,12 @@ export function genererExercicesNiveau2(): Exercice[] {
     const metal = melanger(EMAUX.filter((e) => e.type === 'metal'))[0];
     const couleur = melanger(EMAUX.filter((e) => e.type === 'couleur'))[0];
     const nbZones = partition.zones;
-    const emaux = Array.from({ length: nbZones }, (_, i) =>
-      i % 2 === 0 ? metal.id : couleur.id
-    );
+    // Écartelé / écartelé en sautoir : 1&4 même, 2&3 même (évite parti/taillé visuels)
+    const emaux = (partition.id === 'ecartele' || partition.id === 'ecartele-en-sautoir')
+      ? [metal.id, couleur.id, couleur.id, metal.id]
+      : Array.from({ length: nbZones }, (_, i) =>
+          i % 2 === 0 ? metal.id : couleur.id
+        );
 
     exercices.push({
       id: `n2-identifier-${partition.id}`,
@@ -35,20 +39,13 @@ export function genererExercicesNiveau2(): Exercice[] {
     { partition: 'coupe' as IdPartition, emaux: ['azur', 'argent'] },
     { partition: 'tranche' as IdPartition, emaux: ['argent', 'sinople'] },
     { partition: 'taille' as IdPartition, emaux: ['or', 'sable'] },
-    { partition: 'ecartele' as IdPartition, emaux: ['gueules', 'or', 'gueules', 'or'] },
+    { partition: 'ecartele' as IdPartition, emaux: ['gueules', 'or', 'or', 'gueules'] },
   ];
 
   for (const combo of combinaisons) {
     const p = PARTITIONS.find((p) => p.id === combo.partition)!;
-    const e1 = EMAUX.find((e) => e.id === combo.emaux[0])!;
-    const e2 = EMAUX.find((e) => e.id === combo.emaux[1])!;
-
-    let bonneReponse: string;
-    if (combo.partition === 'ecartele') {
-      bonneReponse = `Écartelé, au 1 et 4 d'${e1.nom.toLowerCase()}, au 2 et 3 d'${e2.nom.toLowerCase()}`;
-    } else {
-      bonneReponse = `${p.nom}, d'${e1.nom.toLowerCase()} et d'${e2.nom.toLowerCase()}`;
-    }
+    // Utilise blasonner() pour un blasonnement correct (élision, forme simple écartelé)
+    const bonneReponse = blasonner({ partition: combo.partition, emaux: combo.emaux, meubles: [] });
 
     exercices.push({
       id: `n2-blasonner-${combo.partition}-${combo.emaux.join('-')}`,

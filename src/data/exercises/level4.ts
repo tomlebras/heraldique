@@ -120,7 +120,7 @@ export function genererExercicesNiveau4(): Exercice[] {
     },
     {
       description: 'Construisez : « Écartelé, d\'or et d\'azur »',
-      blason: { partition: 'ecartele' as const, emaux: ['or', 'azur', 'or', 'azur'], meubles: [] },
+      blason: { partition: 'ecartele' as const, emaux: ['or', 'azur', 'azur', 'or'], meubles: [] },
     },
   ];
 

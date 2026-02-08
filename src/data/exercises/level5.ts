@@ -97,7 +97,7 @@ export function genererExercicesNiveau5(): Exercice[] {
   const complexes: Blason[] = [
     {
       partition: 'ecartele',
-      emaux: ['azur', 'gueules', 'azur', 'gueules'],
+      emaux: ['azur', 'gueules', 'gueules', 'azur'],
       piece: { id: 'croix' as IdPiece, email: 'or' },
       meubles: [],
     },

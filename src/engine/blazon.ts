@@ -12,16 +12,22 @@ export function blasonner(blason: Blason): string {
   const partition = getPartition(blason.partition);
   if (blason.partition === 'plein') {
     const email = getEmail(blason.emaux[0]);
-    parts.push(`D'${apostropheEmail(email?.nom ?? '')}`);
+    const de = deEmail(email?.nom ?? '');
+    parts.push(de.charAt(0).toUpperCase() + de.slice(1));
   } else if (partition) {
     const nomsEmaux = blason.emaux.map((id) => getEmail(id)?.nom ?? id);
     if (blason.partition === 'parti' || blason.partition === 'coupe' ||
         blason.partition === 'tranche' || blason.partition === 'taille') {
-      parts.push(`${partition.nom}, d'${apostropheEmail(nomsEmaux[0])} et d'${apostropheEmail(nomsEmaux[1])}`);
+      parts.push(`${partition.nom}, ${deEmail(nomsEmaux[0])} et ${deEmail(nomsEmaux[1])}`);
     } else if (blason.partition === 'ecartele') {
-      parts.push(`Écartelé, au 1 et 4 d'${apostropheEmail(nomsEmaux[0])}, au 2 et 3 d'${apostropheEmail(nomsEmaux[1])}`);
+      // Forme simple si seulement 2 émaux (1&4 identiques, 2&3 identiques)
+      if (nomsEmaux[0] === nomsEmaux[3] && nomsEmaux[1] === nomsEmaux[2]) {
+        parts.push(`Écartelé ${deEmail(nomsEmaux[0])} et ${deEmail(nomsEmaux[1])}`);
+      } else {
+        parts.push(`Écartelé, au 1 ${deEmail(nomsEmaux[0])}, au 2 ${deEmail(nomsEmaux[1])}, au 3 ${deEmail(nomsEmaux[2])}, au 4 ${deEmail(nomsEmaux[3])}`);
+      }
     } else {
-      parts.push(`${partition.nom}, ${nomsEmaux.map((n, i) => `${i + 1}) d'${apostropheEmail(n)}`).join(', ')}`);
+      parts.push(`${partition.nom}, ${nomsEmaux.map((n, i) => `${i + 1}) ${deEmail(n)}`).join(', ')}`);
     }
   }
 
@@ -31,7 +37,7 @@ export function blasonner(blason: Blason): string {
     const emailPiece = getEmail(blason.piece.email);
     if (piece && emailPiece) {
       const article = articlePiece(piece.nom);
-      parts.push(`${article}${piece.nom.toLowerCase()} d'${apostropheEmail(emailPiece.nom)}`);
+      parts.push(`${article}${piece.nom.toLowerCase()} ${deEmail(emailPiece.nom)}`);
     }
   }
 
@@ -41,22 +47,28 @@ export function blasonner(blason: Blason): string {
     const emailMeuble = getEmail(mp.email);
     if (meuble && emailMeuble) {
       const article = articleMeuble(meuble.nom);
-      parts.push(`${article}${meuble.nom.toLowerCase()} d'${apostropheEmail(emailMeuble.nom)}`);
+      parts.push(`${article}${meuble.nom.toLowerCase()} ${deEmail(emailMeuble.nom)}`);
     }
   }
 
   return parts.join(', ') + '.';
 }
 
-/** Gère l'apostrophe devant les émaux commençant par voyelle */
-function apostropheEmail(nom: string): string {
-  return nom.toLowerCase();
+/** Retourne "d'or", "d'azur", "d'argent" ou "de gueules", "de sinople", etc. */
+function deEmail(nom: string): string {
+  const lower = nom.toLowerCase();
+  if (['a', 'e', 'i', 'o', 'u', 'é'].some((v) => lower.startsWith(v))) {
+    return `d'${lower}`;
+  }
+  return `de ${lower}`;
 }
 
 function articlePiece(nom: string): string {
   const lower = nom.toLowerCase();
   if (['a', 'e', 'i', 'o', 'u', 'é'].some((v) => lower.startsWith(v))) return "à l'";
-  return 'à la ';
+  const feminins = ['fasce', 'bande', 'barre', 'croix', 'bordure', 'champagne'];
+  if (feminins.includes(lower)) return 'à la ';
+  return 'au ';
 }
 
 function articleMeuble(nom: string): string {
@@ -137,6 +149,7 @@ const VARIANTES: Record<string, string[]> = {
   'champagne': ['champagne'],
   'bordure': ['bordure'],
   'lion': ['lion', 'lions'],
+  'lionceau': ['lionceau', 'lionceaux'],
   'aigle': ['aigle', 'aigles'],
   'fleur de lys': ['fleur de lys', 'fleur de lis', 'fleurs de lys', 'fleurs de lis', 'fleur de ly'],
   'etoile': ['etoile', 'étoile', 'etoiles'],
@@ -231,5 +244,5 @@ export function comparerBlasonnements(reponse: string, attendu: string): { score
     if (match) communs++;
   }
   const score = communs / Math.max(motsReponse.length, motsAttendu.length);
-  return { score, correct: score >= 0.6 };
+  return { score, correct: score >= 0.75 };
 }

@@ -55,7 +55,7 @@ export default function FreeTextMode({ exercice, onReponse }: Props) {
             value={texte}
             onChange={(e) => setTexte(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={exercice.indice ?? 'Tapez votre réponse…'}
+            placeholder="Votre réponse…"
             autoComplete="off"
             autoCorrect="off"
             spellCheck={false}
@@ -75,6 +75,7 @@ export default function FreeTextMode({ exercice, onReponse }: Props) {
       <AnswerFeedback
         correct={resultat}
         bonneReponse={exercice.reponse}
+        reponseUtilisateur={texte}
         onSuivant={handleSuivant}
       />
     </div>

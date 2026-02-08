@@ -2,7 +2,9 @@ import type { Meuble } from '../types/heraldry';
 
 /** Meubles héraldiques français */
 export const MEUBLES: Meuble[] = [
-  { id: 'lion', nom: 'Lion', description: 'Représenté rampant (dressé sur ses pattes arrières), symbole de courage et de force.' },
+  { id: 'lion', nom: 'Lion', description: 'Rampant (dressé, de profil). Symbole de courage et de force.' },
+  { id: 'lionceau', nom: 'Lionceau', description: 'Lion de taille réduite. Utilisé quand l\'écu en porte plusieurs.' },
+  { id: 'leopard', nom: 'Léopard', description: 'Lion passant (marchant), la tête de face. C\'est un lion dans une autre posture.' },
   { id: 'aigle', nom: 'Aigle', description: 'Représentée éployée (ailes étendues), symbole de puissance et de majesté.' },
   { id: 'fleur-de-lys', nom: 'Fleur de lys', description: 'Symbole royal français par excellence, représentant la pureté et la royauté.' },
   { id: 'etoile', nom: 'Étoile', description: 'Étoile à cinq rais (pointes), symbole de noblesse et de grandeur.' },
@@ -26,6 +28,10 @@ export function getMeublePath(id: string): string {
     case 'lion':
       // Lion rampant stylisé
       return `M -20,80 L -30,40 C -40,20 -50,0 -45,-20 C -40,-35 -30,-50 -20,-60 C -10,-70 0,-80 10,-85 C 20,-80 25,-70 20,-55 L 30,-45 C 35,-55 45,-60 50,-50 C 55,-40 45,-30 35,-25 L 25,-15 C 30,-5 35,10 30,25 L 40,15 C 50,5 60,10 55,25 L 45,35 L 50,50 C 55,60 50,70 40,75 L 25,80 L 15,60 L 5,80 Z M -5,-60 C -10,-55 -10,-50 -5,-50 C 0,-50 0,-55 -5,-60 Z`;
+
+    case 'leopard':
+      // Léopard (lion passant, tête de face) — fallback
+      return `M -70,30 L -60,10 C -55,-5 -45,-15 -30,-20 L -25,-35 C -20,-45 -10,-50 0,-45 L 10,-50 C 15,-55 25,-50 20,-40 L 15,-30 C 25,-25 35,-15 40,-5 L 50,0 L 60,5 L 70,-5 C 75,-10 80,-5 75,0 L 65,10 L 55,15 L 60,25 L 55,35 L 45,30 L 35,35 L 30,50 L 20,50 L 25,35 L 15,30 L 5,35 L 0,50 L -10,50 L -5,35 L -15,30 L -30,35 L -35,50 L -45,50 L -40,35 L -50,30 L -60,35 L -65,50 L -75,50 L -70,30 Z`;
 
     case 'aigle':
       // Aigle éployée

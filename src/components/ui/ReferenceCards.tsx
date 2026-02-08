@@ -7,10 +7,15 @@ import Shield from '../svg/Shield';
 import HeraldryTooltip from './HeraldryTooltip';
 
 const SVG_CHARGES = new Set([
-  'lion', 'leopard', 'aigle', 'fleur-de-lys', 'croissant',
+  'lion', 'lionceau', 'leopard', 'aigle', 'fleur-de-lys', 'croissant',
   'tour', 'epee', 'arbre', 'cerf', 'coquille',
   'cerf-couche', 'lion-leoparde',
 ]);
+
+/** Meubles qui réutilisent le SVG d'un autre */
+const SVG_ALIAS: Record<string, string> = {
+  'lionceau': 'lion',
+};
 
 /** Mini-écu avec tooltip blasonnement au hover */
 function ShieldWithTooltip({ blazon, children }: { blazon: string; children: React.ReactNode }) {
@@ -75,17 +80,23 @@ const CHARGE_LAYOUT: Record<string, { x: number; y: number; w: number; h: number
 };
 
 /** Mini-écu pour les cartes de terminologie */
-function TermShield({ chargeId, blazon, mirror, clipBottom, pair }: {
+function TermShield({ chargeId, blazon, mirror, clipBottom, pair, coupe, variantSvg }: {
   chargeId: string; blazon: string; mirror?: boolean; clipBottom?: number;
-  pair?: 'affronted' | 'addorsed';
+  pair?: 'affronted' | 'addorsed'; coupe?: boolean; variantSvg?: string;
 }) {
   const layout = CHARGE_LAYOUT[chargeId] ?? { x: 180, y: 180, w: 240, h: 240 };
-  const clipId = clipBottom ? `clip-${chargeId}` : undefined;
+  const clipId = clipBottom ? `clip-${chargeId}-bot` : undefined;
 
   const renderContent = () => {
     // Deux meubles côte à côte (affronté/adossé) avec lion.svg
     if (pair) {
-      const s = 160; // taille de chaque lion
+      const s = 190;
+      const gap = 20;
+      const svgHref = `/charges/${variantSvg ?? chargeId}.svg`;
+      // Centrer la paire : total = s + gap + s, offset = (600 - total) / 2
+      const leftX = (600 - s * 2 - gap) / 2;
+      const rightX = leftX + s + gap;
+      const y = 220;
       // Affronté : gauche miroir (→), droite normal (←) = face à face
       // Adossé : gauche normal (←), droite miroir (→) = dos à dos
       const leftMirror = pair === 'affronted';
@@ -93,28 +104,29 @@ function TermShield({ chargeId, blazon, mirror, clipBottom, pair }: {
       return (
         <>
           {leftMirror ? (
-            <g transform={`translate(${280}, 220) scale(-1, 1)`}>
-              <image href="/charges/lion.svg" x={-s} y={0} width={s} height={s} preserveAspectRatio="xMidYMid meet" />
+            <g transform={`translate(${leftX + s}, ${y}) scale(-1, 1)`}>
+              <image href={svgHref} x={0} y={0} width={s} height={s} preserveAspectRatio="xMidYMid meet" />
             </g>
           ) : (
-            <image href="/charges/lion.svg" x={120} y={220} width={s} height={s} preserveAspectRatio="xMidYMid meet" />
+            <image href={svgHref} x={leftX} y={y} width={s} height={s} preserveAspectRatio="xMidYMid meet" />
           )}
           {rightMirror ? (
-            <g transform={`translate(${480}, 220) scale(-1, 1)`}>
-              <image href="/charges/lion.svg" x={-s} y={0} width={s} height={s} preserveAspectRatio="xMidYMid meet" />
+            <g transform={`translate(${rightX + s}, ${y}) scale(-1, 1)`}>
+              <image href={svgHref} x={0} y={0} width={s} height={s} preserveAspectRatio="xMidYMid meet" />
             </g>
           ) : (
-            <image href="/charges/lion.svg" x={320} y={220} width={s} height={s} preserveAspectRatio="xMidYMid meet" />
+            <image href={svgHref} x={rightX} y={y} width={s} height={s} preserveAspectRatio="xMidYMid meet" />
           )}
         </>
       );
     }
 
     if (SVG_CHARGES.has(chargeId)) {
+      const svgFile = variantSvg ?? chargeId;
       return (
         <g transform={mirror ? 'translate(600, 0) scale(-1, 1)' : undefined} clipPath={clipId ? `url(#${clipId})` : undefined}>
           <image
-            href={`/charges/${chargeId}.svg`}
+            href={`/charges/${svgFile}.svg`}
             x={layout.x} y={layout.y} width={layout.w} height={layout.h}
             preserveAspectRatio="xMidYMid meet"
           />
@@ -131,7 +143,14 @@ function TermShield({ chargeId, blazon, mirror, clipBottom, pair }: {
   return (
     <div className="ref-term-shield shield-tooltip-wrap">
       <Shield>
-        <rect width={600} height={720} fill="#0055A4" />
+        {coupe ? (
+          <>
+            <rect width={600} height={340} fill="#E21313" />
+            <rect y={340} width={600} height={380} fill="#0055A4" />
+          </>
+        ) : (
+          <rect width={600} height={720} fill="#0055A4" />
+        )}
         {clipId && (
           <defs>
             <clipPath id={clipId}>
@@ -189,32 +208,40 @@ export default function ReferenceCards() {
 
       {/* Émaux */}
       <section className="ref-section">
-        <h3>Les 7 émaux</h3>
+        <h3>Les émaux</h3>
         <p className="ref-intro">
-          Les émaux se divisent en <strong>métaux</strong> (Or, Argent) et <strong>couleurs</strong> (Gueules, Azur, Sinople, Sable, Pourpre).
-          La <em>règle des émaux</em> interdit de poser métal sur métal ou couleur sur couleur.
+          Les émaux se divisent en trois catégories. La <em>règle des émaux</em> interdit de poser métal sur métal ou couleur sur couleur.
+          Exception : une pièce qui enfreint cette règle est dite <HeraldryTooltip term={findTerm('cousu')!}>cousue</HeraldryTooltip> (surtout le chef).
+          Les fourrures, composées de métal et de couleur, ne sont pas soumises à cette règle.
         </p>
+
+        <h4 style={{ marginTop: 24, marginBottom: 14, fontSize: 16, color: 'var(--gold)' }}>Métaux</h4>
         <div className="ref-grid ref-emaux">
-          {EMAUX.map((email) => (
+          {EMAUX.filter((e) => e.type === 'metal').map((email) => (
             <div key={email.id} className="ref-card">
-              <div
-                className="ref-color-swatch"
-                style={{ backgroundColor: email.hex }}
-              />
+              <div className="ref-color-swatch" style={{ backgroundColor: email.hex }} />
               <div className="ref-card-info">
                 <strong>{email.nom}</strong>
-                <span className={`ref-type ref-type-${email.type === 'metal' ? 'metal' : 'couleur'}`}>
-                  {email.type === 'metal' ? 'métal' : 'couleur'}
-                </span>
+                <span className="ref-type ref-type-metal">métal</span>
               </div>
             </div>
           ))}
         </div>
 
-        <h4 style={{ marginTop: 28, marginBottom: 14, fontSize: 16, color: 'var(--text-muted)' }}>Les fourrures</h4>
-        <p className="ref-intro" style={{ marginTop: 0 }}>
-          Émaux composés de motifs alternant métal et couleur. Elles ne sont pas soumises à la règle des émaux.
-        </p>
+        <h4 style={{ marginTop: 24, marginBottom: 14, fontSize: 16, color: '#818cf8' }}>Couleurs</h4>
+        <div className="ref-grid ref-emaux">
+          {EMAUX.filter((e) => e.type === 'couleur').map((email) => (
+            <div key={email.id} className="ref-card">
+              <div className="ref-color-swatch" style={{ backgroundColor: email.hex }} />
+              <div className="ref-card-info">
+                <strong>{email.nom}</strong>
+                <span className="ref-type ref-type-couleur">couleur</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <h4 style={{ marginTop: 24, marginBottom: 14, fontSize: 16, color: '#d4a853' }}>Fourrures</h4>
         <div className="ref-grid ref-emaux">
           <div className="ref-card">
             <svg width={56} height={56} viewBox="0 0 48 48" style={{ borderRadius: 10, border: '2px solid var(--border)' }}>
@@ -389,18 +416,23 @@ export default function ReferenceCards() {
       <section className="ref-section">
         <h3>Les meubles</h3>
         <div className="ref-grid ref-meubles">
-          {MEUBLES.map((meuble) => (
+          {MEUBLES.map((meuble) => {
+            const svgFile = SVG_ALIAS[meuble.id] ?? meuble.id;
+            const chargeSize = meuble.id === 'lionceau' ? 170 : 240;
+            const offset = (600 - chargeSize) / 2;
+            const yOffset = meuble.id === 'lionceau' ? 240 : 180;
+            return (
               <div key={meuble.id} className="ref-card">
                 <ShieldWithTooltip blazon={getMeubleBlason(meuble.nom)}>
                   <Shield>
                     <rect width={600} height={720} fill="#0055A4" />
                     {SVG_CHARGES.has(meuble.id) ? (
                       <image
-                        href={`/charges/${meuble.id}.svg`}
-                        x={180}
-                        y={180}
-                        width={240}
-                        height={240}
+                        href={`/charges/${svgFile}.svg`}
+                        x={offset}
+                        y={yOffset}
+                        width={chargeSize}
+                        height={chargeSize}
                         preserveAspectRatio="xMidYMid meet"
                       />
                     ) : (
@@ -415,7 +447,8 @@ export default function ReferenceCards() {
                   <span className="ref-desc"><TermText text={meuble.description} /></span>
                 </div>
               </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -430,7 +463,7 @@ export default function ReferenceCards() {
         <h4 style={{ marginTop: 28, marginBottom: 14, fontSize: 16, color: 'var(--text-muted)' }}>Postures</h4>
         <div className="ref-terminology">
           <div className="ref-term-card">
-            <TermShield chargeId="lion" blazon="D'azur, au lion d'or" />
+            <TermShield chargeId="lion" blazon="D'azur, au lion d'or" variantSvg="lion-mono" />
             <div className="ref-term-content">
               <h5>Rampant</h5>
               <p>Dressé sur ses pattes arrière, de profil. Posture par défaut du lion.</p>
@@ -465,28 +498,28 @@ export default function ReferenceCards() {
             </div>
           </div>
           <div className="ref-term-card">
-            <TermShield chargeId="lion" blazon="D'azur, au lion issant d'or" clipBottom={310} />
+            <TermShield chargeId="lion" blazon="Coupé de gueules et d'azur, au lion issant d'or" clipBottom={340} coupe variantSvg="lion-mono" />
             <div className="ref-term-content">
               <h5>Issant</h5>
-              <p>Semble sortir d'une pièce, seule la moitié supérieure est visible.</p>
+              <p>Semble sortir d'une pièce ou d'une ligne de partition, seule la moitié supérieure est visible.</p>
             </div>
           </div>
           <div className="ref-term-card">
-            <TermShield chargeId="lion" blazon="D'azur, au lion contourné d'or" mirror />
+            <TermShield chargeId="lion" blazon="D'azur, au lion contourné d'or" mirror variantSvg="lion-mono" />
             <div className="ref-term-content">
               <h5>Contourné</h5>
               <p>Tourné vers senestre (inversé par rapport à la position normale, vers dextre).</p>
             </div>
           </div>
           <div className="ref-term-card">
-            <TermShield chargeId="lion" blazon="D'azur, à deux lions affrontés d'or" pair="affronted" />
+            <TermShield chargeId="lion" blazon="D'azur, à deux lions affrontés d'or" pair="affronted" variantSvg="lion-mono" />
             <div className="ref-term-content">
               <h5>Affronté</h5>
               <p>Deux figures face à face.</p>
             </div>
           </div>
           <div className="ref-term-card">
-            <TermShield chargeId="lion" blazon="D'azur, à deux lions adossés d'or" pair="addorsed" />
+            <TermShield chargeId="lion" blazon="D'azur, à deux lions adossés d'or" pair="addorsed" variantSvg="lion-mono" />
             <div className="ref-term-content">
               <h5>Adossé</h5>
               <p>Deux figures dos à dos.</p>
@@ -514,42 +547,42 @@ export default function ReferenceCards() {
         </p>
         <div className="ref-terminology">
           <div className="ref-term-card">
-            <TermShield chargeId="lion" blazon="D'azur, au lion d'or, armé de gueules" />
+            <TermShield chargeId="lion" blazon="D'azur, au lion d'or, armé de gueules" variantSvg="lion-arme" />
             <div className="ref-term-content">
               <h5>Armé</h5>
               <p>Griffes d'un émail différent.</p>
             </div>
           </div>
           <div className="ref-term-card">
-            <TermShield chargeId="lion" blazon="D'azur, au lion d'or, lampassé de gueules" />
+            <TermShield chargeId="lion" blazon="D'azur, au lion d'or, lampassé de gueules" variantSvg="lion-lampasse" />
             <div className="ref-term-content">
               <h5>Lampassé</h5>
               <p>Langue d'un émail différent.</p>
             </div>
           </div>
           <div className="ref-term-card">
-            <TermShield chargeId="lion" blazon="D'azur, au lion d'or, couronné de gueules" />
+            <TermShield chargeId="lion" blazon="D'azur, au lion d'or, couronné de gueules" variantSvg="lion-mono" />
             <div className="ref-term-content">
               <h5>Couronné</h5>
               <p>Portant une couronne. On précise l'émail si différent du corps.</p>
             </div>
           </div>
           <div className="ref-term-card">
-            <TermShield chargeId="aigle" blazon="D'azur, à l'aigle d'or, becquée de gueules" />
+            <TermShield chargeId="aigle" blazon="D'azur, à l'aigle d'or, becquée de gueules"  />
             <div className="ref-term-content">
               <h5>Becqué</h5>
               <p>Bec d'un émail différent (oiseaux).</p>
             </div>
           </div>
           <div className="ref-term-card">
-            <TermShield chargeId="aigle" blazon="D'azur, à l'aigle d'or, membrée de gueules" />
+            <TermShield chargeId="aigle" blazon="D'azur, à l'aigle d'or, membrée de gueules"  />
             <div className="ref-term-content">
               <h5>Membré</h5>
               <p>Pattes d'un émail différent (oiseaux).</p>
             </div>
           </div>
           <div className="ref-term-card">
-            <TermShield chargeId="lion" blazon="D'azur, au lion d'or, allumé de gueules" />
+            <TermShield chargeId="lion" blazon="D'azur, au lion d'or, allumé de gueules" variantSvg="lion-allume" />
             <div className="ref-term-content">
               <h5>Allumé</h5>
               <p>Yeux d'un émail différent.</p>

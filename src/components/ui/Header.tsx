@@ -28,6 +28,12 @@ export default function Header({ vue, onNaviguer }: Props) {
         >
           Référence
         </button>
+        <button
+          className={`nav-btn ${vue === 'parametres' ? 'nav-active' : ''}`}
+          onClick={() => onNaviguer('parametres')}
+        >
+          Paramètres
+        </button>
       </nav>
       <div className="header-xp">
         {etat.xp} XP

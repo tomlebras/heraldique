@@ -4,11 +4,12 @@ import Header from './components/ui/Header';
 import LevelSelector from './components/game/LevelSelector';
 import ExerciseView from './components/game/ExerciseView';
 import ReferenceCards from './components/ui/ReferenceCards';
+import SettingsView from './components/ui/SettingsView';
 import './styles/global.css';
 import './styles/shield.css';
 import './styles/game.css';
 
-type Vue = 'accueil' | 'jeu' | 'reference';
+type Vue = 'accueil' | 'jeu' | 'reference' | 'parametres';
 
 function AppContent() {
   const [vue, setVue] = useState<Vue>('accueil');
@@ -25,6 +26,9 @@ function AppContent() {
         )}
         {vue === 'reference' && (
           <ReferenceCards />
+        )}
+        {vue === 'parametres' && (
+          <SettingsView />
         )}
       </main>
     </div>

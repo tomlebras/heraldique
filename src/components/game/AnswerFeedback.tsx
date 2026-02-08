@@ -1,10 +1,31 @@
+import { useEffect } from 'react';
+
 interface Props {
   correct: boolean | null;
   bonneReponse?: string;
+  reponseUtilisateur?: string;
   onSuivant: () => void;
 }
 
-export default function AnswerFeedback({ correct, bonneReponse, onSuivant }: Props) {
+export default function AnswerFeedback({ correct, bonneReponse, reponseUtilisateur, onSuivant }: Props) {
+  useEffect(() => {
+    if (correct === null) return;
+    // Délai pour éviter que l'Enter de validation déclenche immédiatement "suivant"
+    let active = false;
+    const timer = setTimeout(() => { active = true; }, 150);
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && active) {
+        e.preventDefault();
+        onSuivant();
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('keydown', handler);
+    };
+  }, [correct, onSuivant]);
+
   if (correct === null) return null;
 
   return (
@@ -12,9 +33,14 @@ export default function AnswerFeedback({ correct, bonneReponse, onSuivant }: Pro
       <div className="feedback-icon">{correct ? '✓' : '✗'}</div>
       <div className="feedback-text">
         {correct ? 'Bonne réponse !' : 'Incorrect'}
+        {reponseUtilisateur && (
+          <div className={`feedback-user-answer ${correct ? 'feedback-answer-correct' : 'feedback-answer-wrong'}`}>
+            Votre réponse : <strong>{reponseUtilisateur}</strong>
+          </div>
+        )}
         {!correct && bonneReponse && (
           <div className="feedback-reponse">
-            Réponse attendue : <strong>{bonneReponse}</strong>
+            Bonne réponse : <strong>{bonneReponse}</strong>
           </div>
         )}
       </div>

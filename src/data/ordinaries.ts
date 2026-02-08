@@ -46,8 +46,15 @@ export function getPiecePath(id: string): string {
     case 'croix':
       return `M ${MID_X - TIERS_W / 2},0 L ${MID_X + TIERS_W / 2},0 L ${MID_X + TIERS_W / 2},${MID_Y - TIERS / 2} L ${W},${MID_Y - TIERS / 2} L ${W},${MID_Y + TIERS / 2} L ${MID_X + TIERS_W / 2},${MID_Y + TIERS / 2} L ${MID_X + TIERS_W / 2},${H} L ${MID_X - TIERS_W / 2},${H} L ${MID_X - TIERS_W / 2},${MID_Y + TIERS / 2} L 0,${MID_Y + TIERS / 2} L 0,${MID_Y - TIERS / 2} L ${MID_X - TIERS_W / 2},${MID_Y - TIERS / 2} Z`;
 
-    case 'sautoir':
-      return `M ${MID_X},${MID_Y - 80} L ${W - 40},0 L ${W},0 L ${W},40 L ${MID_X + 80},${MID_Y} L ${W},${H - 40} L ${W},${H} L ${W - 40},${H} L ${MID_X},${MID_Y + 80} L 40,${H} L 0,${H} L 0,${H - 40} L ${MID_X - 80},${MID_Y} L 0,40 L 0,0 L 40,0 Z`;
+    case 'sautoir': {
+      // Single outline path tracing the full X shape (no hollow intersection)
+      // Compute the 4 intersection points where bande and barre edges cross
+      const ax = (W - EPAISSEUR) * (H - 2 * EPAISSEUR) / (2 * (H - EPAISSEUR));
+      const dx = W - ax;
+      const cy_top = (H - EPAISSEUR) * (W - 2 * EPAISSEUR) / (2 * (W - EPAISSEUR));
+      const cy_bot = H - cy_top;
+      return `M 0,0 L ${EPAISSEUR},0 L ${MID_X},${cy_top} L ${W - EPAISSEUR},0 L ${W},0 L ${W},${EPAISSEUR} L ${dx},${MID_Y} L ${W},${H - EPAISSEUR} L ${W},${H} L ${W - EPAISSEUR},${H} L ${MID_X},${cy_bot} L ${EPAISSEUR},${H} L 0,${H} L 0,${H - EPAISSEUR} L ${ax},${MID_Y} L 0,${EPAISSEUR} Z`;
+    }
 
     case 'chef':
       return `M 0,0 L ${W},0 L ${W},${TIERS} L 0,${TIERS} Z`;

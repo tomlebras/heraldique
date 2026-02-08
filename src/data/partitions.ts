@@ -47,13 +47,13 @@ export const PARTITIONS: Partition[] = [
   {
     id: 'tierce-en-fasce',
     nom: 'Tiercé en fasce',
-    description: "L'écu est divisé en trois bandes horizontales égales.",
+    description: "L'écu est divisé horizontalement en trois parties égales.",
     zones: 3,
   },
   {
     id: 'tierce-en-pal',
     nom: 'Tiercé en pal',
-    description: "L'écu est divisé en trois bandes verticales égales.",
+    description: "L'écu est divisé verticalement en trois parties égales.",
     zones: 3,
   },
 ];
@@ -92,15 +92,17 @@ export function getClipPaths(id: string): string[] {
       ];
 
     case 'tranche':
+      // Tranché = \ diagonal (dextre du chef → senestre de la pointe)
       return [
-        `M 0,0 L ${W},0 L 0,${H * 0.72} Q 0,${H * 0.75} 0,${H * 0.72} Z`,
-        `M ${W},0 L ${W},${H * 0.72} Q ${W},${H * 0.88} ${MID_X},${H} Q 0,${H * 0.88} 0,${H * 0.72} Z`,
+        `M 0,0 L ${W},0 L ${W},${H} Z`,
+        `M 0,0 L ${W},${H} L 0,${H} Z`,
       ];
 
     case 'taille':
+      // Taillé = / diagonal (senestre du chef → dextre de la pointe)
       return [
-        `M 0,0 L ${W},0 L ${W},${H * 0.72} Q ${W},${H * 0.75} ${W},${H * 0.72} Z`,
-        `M 0,0 L 0,${H * 0.72} Q 0,${H * 0.88} ${MID_X},${H} Q ${W},${H * 0.88} ${W},${H * 0.72} Z`,
+        `M 0,0 L ${W},0 L 0,${H} Z`,
+        `M ${W},0 L ${W},${H} L 0,${H} Z`,
       ];
 
     case 'ecartele':
@@ -116,11 +118,11 @@ export function getClipPaths(id: string): string[] {
         // Chef (haut)
         `M 0,0 L ${W},0 L ${MID_X},${MID_Y} Z`,
         // Dextre (gauche)
-        `M 0,0 L ${MID_X},${MID_Y} L 0,${H * 0.72} Q 0,${H * 0.82} 0,${H * 0.72} Z`,
+        `M 0,0 L ${MID_X},${MID_Y} L 0,${H} Z`,
         // Senestre (droite)
-        `M ${W},0 L ${W},${H * 0.72} Q ${W},${H * 0.82} ${W},${H * 0.72} L ${MID_X},${MID_Y} Z`,
+        `M ${W},0 L ${W},${H} L ${MID_X},${MID_Y} Z`,
         // Pointe (bas)
-        `M ${MID_X},${MID_Y} L ${W},${H * 0.72} Q ${W},${H * 0.88} ${MID_X},${H} Q 0,${H * 0.88} 0,${H * 0.72} Z`,
+        `M ${MID_X},${MID_Y} L ${W},${H} L 0,${H} Z`,
       ];
 
     case 'tierce-en-fasce': {

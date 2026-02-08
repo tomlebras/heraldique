@@ -24,7 +24,8 @@ const ETAT_INITIAL: EtatJeu = {
 type Action =
   | { type: 'REPONDRE'; resultat: ResultatExercice }
   | { type: 'CHOISIR_NIVEAU'; niveau: number }
-  | { type: 'REINITIALISER' };
+  | { type: 'REINITIALISER' }
+  | { type: 'IMPORTER'; etat: EtatJeu };
 
 function reducer(state: EtatJeu, action: Action): EtatJeu {
   switch (action.type) {
@@ -72,6 +73,9 @@ function reducer(state: EtatJeu, action: Action): EtatJeu {
     case 'REINITIALISER':
       return ETAT_INITIAL;
 
+    case 'IMPORTER':
+      return action.etat;
+
     default:
       return state;
   }
@@ -90,6 +94,8 @@ interface ContexteJeu {
   repondre: (resultat: ResultatExercice) => void;
   choisirNiveau: (niveau: number) => void;
   reinitialiser: () => void;
+  exporterDonnees: () => void;
+  importerDonnees: (json: string) => string | null;
 }
 
 const GameCtx = createContext<ContexteJeu | null>(null);
@@ -101,11 +107,49 @@ export function GameProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(CLE_STORAGE, JSON.stringify(etat));
   }, [etat]);
 
+  const exporterDonnees = () => {
+    const data = {
+      ...etat,
+      exportedAt: new Date().toISOString(),
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const date = new Date().toISOString().slice(0, 10);
+    a.download = `heraldique-backup-${date}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const importerDonnees = (json: string): string | null => {
+    try {
+      const data = JSON.parse(json);
+      if (!data.xp && data.xp !== 0) return 'Fichier invalide : champ "xp" manquant';
+      if (!Array.isArray(data.niveaux)) return 'Fichier invalide : champ "niveaux" manquant';
+      if (!Array.isArray(data.historique)) return 'Fichier invalide : champ "historique" manquant';
+      const etatImporte: EtatJeu = {
+        xp: data.xp,
+        streakActuel: data.streakActuel ?? 0,
+        meilleurStreak: data.meilleurStreak ?? 0,
+        niveaux: data.niveaux,
+        niveauActuel: data.niveauActuel ?? 1,
+        historique: data.historique,
+      };
+      dispatch({ type: 'IMPORTER', etat: etatImporte });
+      return null;
+    } catch {
+      return 'Fichier JSON invalide';
+    }
+  };
+
   const value: ContexteJeu = {
     etat,
     repondre: (resultat) => dispatch({ type: 'REPONDRE', resultat }),
     choisirNiveau: (niveau) => dispatch({ type: 'CHOISIR_NIVEAU', niveau }),
     reinitialiser: () => dispatch({ type: 'REINITIALISER' }),
+    exporterDonnees,
+    importerDonnees,
   };
 
   return <GameCtx.Provider value={value}>{children}</GameCtx.Provider>;

@@ -31,9 +31,11 @@ export function genererBlasonPartition(): Blason {
   const email1 = choixAleatoire(EMAUX);
   const email2Id = emailCompatible(email1.id);
   const nbZones = partition === 'ecartele' ? 4 : 2;
-  const emaux = Array.from({ length: nbZones }, (_, i) =>
-    i % 2 === 0 ? email1.id : email2Id
-  );
+  // Écartelé / écartelé en sautoir : 1&4 même émail, 2&3 même émail
+  // (évite de ressembler à un parti, coupé, tranché ou taillé)
+  const emaux = (partition === 'ecartele' || partition === 'ecartele-en-sautoir')
+    ? [email1.id, email2Id, email2Id, email1.id]
+    : Array.from({ length: nbZones }, (_, i) => i % 2 === 0 ? email1.id : email2Id);
 
   return {
     partition,

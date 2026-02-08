@@ -19,13 +19,14 @@ export function genererExercicesNiveau1(): Exercice[] {
     });
   }
 
-  // Type 2 : Identifier le type (métal ou couleur) — texte libre
+  // Type 2 : Identifier le type (métal ou couleur) — QCM (question fermée)
   for (const email of EMAUX) {
     exercices.push({
       id: `n1-type-${email.id}`,
       niveau: 1,
-      mode: 'identification',
+      mode: 'qcm',
       question: `« ${email.nom} » est-il un métal ou une couleur ?`,
+      choix: ['Métal', 'Couleur'],
       reponse: email.type === 'metal' ? 'Métal' : 'Couleur',
       blason: { partition: 'plein', emaux: [email.id], meubles: [] },
       indice: 'Métal ou Couleur',
