@@ -65,7 +65,9 @@ export type PositionMeuble =
   | 'en-chef'
   | 'en-pointe'
   | 'en-canton-dextre-du-chef'
-  | 'en-canton-senestre-du-chef';
+  | 'en-canton-senestre-du-chef'
+  | 'en-coeur-chef'
+  | 'en-coeur-pointe';
 
 export interface Meuble {
   id: IdMeuble;

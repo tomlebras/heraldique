@@ -615,6 +615,7 @@ export default function ReferenceCards() {
               </ShieldWithTooltip>
               <div className="ref-card-info">
                 <strong>{bh.nom}</strong>
+                <span className="ref-desc" style={{ color: 'var(--gold)', fontSize: 12 }}>{bh.dates}</span>
                 <span className="ref-desc">{bh.description}</span>
               </div>
             </div>

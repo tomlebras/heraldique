@@ -4,10 +4,11 @@ import { melanger } from '../../engine/generator';
 import { blasonner } from '../../engine/blazon';
 
 /** Blasons historiques français */
-export const BLASONS_HISTORIQUES: { nom: string; blason: Blason; description: string }[] = [
+export const BLASONS_HISTORIQUES: { nom: string; blason: Blason; description: string; dates: string }[] = [
   {
     nom: 'Royaume de France',
-    description: 'Les armes du Royaume de France (France moderne)',
+    description: 'France moderne : d\'azur, à trois fleurs de lys d\'or',
+    dates: '1376–1792',
     blason: {
       partition: 'plein',
       emaux: ['azur'],
@@ -19,46 +20,50 @@ export const BLASONS_HISTORIQUES: { nom: string; blason: Blason; description: st
     },
   },
   {
-    nom: 'Ville de Paris',
-    description: 'Armes de la ville de Paris (simplifié)',
-    blason: {
-      partition: 'coupe',
-      emaux: ['azur', 'gueules'],
-      meubles: [
-        { meuble: 'fleur-de-lys' as IdMeuble, email: 'or', position: 'en-chef' },
-      ],
-    },
-  },
-  {
     nom: 'Normandie',
-    description: 'Armes du duché de Normandie (simplifié)',
+    description: 'De gueules, à deux léopards d\'or',
+    dates: 'XIIe siècle',
     blason: {
       partition: 'plein',
       emaux: ['gueules'],
       meubles: [
-        { meuble: 'lion' as IdMeuble, email: 'or', position: 'en-coeur' },
+        { meuble: 'leopard' as IdMeuble, email: 'or', position: 'en-coeur-chef' },
+        { meuble: 'leopard' as IdMeuble, email: 'or', position: 'en-coeur-pointe' },
       ],
     },
   },
   {
     nom: 'Bretagne',
-    description: 'Armes du duché de Bretagne (simplifié)',
+    description: 'D\'hermine plain',
+    dates: '1316–1532',
     blason: {
       partition: 'plein',
-      emaux: ['argent'],
-      piece: { id: 'croix' as IdPiece, email: 'sable' },
+      emaux: ['hermine'],
       meubles: [],
     },
   },
   {
     nom: 'Bourgogne',
-    description: 'Armes anciennes du duché de Bourgogne',
+    description: 'Ancien : d\'azur, semé de fleurs de lys d\'or, à la bordure componée d\'argent et de gueules (simplifié)',
+    dates: 'XIVe siècle',
     blason: {
       partition: 'plein',
       emaux: ['azur'],
       piece: { id: 'bordure' as IdPiece, email: 'gueules' },
       meubles: [
         { meuble: 'fleur-de-lys' as IdMeuble, email: 'or', position: 'en-coeur' },
+      ],
+    },
+  },
+  {
+    nom: 'Aquitaine',
+    description: 'De gueules, au léopard d\'or',
+    dates: 'XIIe siècle',
+    blason: {
+      partition: 'plein',
+      emaux: ['gueules'],
+      meubles: [
+        { meuble: 'leopard' as IdMeuble, email: 'or', position: 'en-coeur' },
       ],
     },
   },
@@ -77,7 +82,7 @@ export function genererExercicesNiveau5(): Exercice[] {
       question: 'À qui appartiennent ces armoiries ?',
       reponse: bh.nom,
       blason: bh.blason,
-      indice: 'Ex : Royaume de France, Normandie, Bretagne…',
+      indice: 'Ex : Royaume de France, Normandie, Bretagne, Aquitaine…',
     });
   }
 

@@ -10,9 +10,13 @@ export function blasonner(blason: Blason): string {
 
   // 1. Champ
   const partition = getPartition(blason.partition);
+  if (blason.partition === 'plein' && blason.emaux[0] === 'hermine' && !blason.piece && blason.meubles.length === 0) {
+    return 'D\'hermine plain.';
+  }
   if (blason.partition === 'plein') {
     const email = getEmail(blason.emaux[0]);
-    const de = deEmail(email?.nom ?? '');
+    const nom = blason.emaux[0] === 'hermine' ? 'hermine' : email?.nom ?? '';
+    const de = deEmail(nom);
     parts.push(de.charAt(0).toUpperCase() + de.slice(1));
   } else if (partition) {
     const nomsEmaux = blason.emaux.map((id) => getEmail(id)?.nom ?? id);
@@ -41,13 +45,30 @@ export function blasonner(blason: Blason): string {
     }
   }
 
-  // 3. Meubles
+  // 3. Meubles (grouper les identiques)
+  const groupes = new Map<string, { meuble: string; nom: string; email: string; count: number }>();
   for (const mp of blason.meubles) {
-    const meuble = getMeuble(mp.meuble);
-    const emailMeuble = getEmail(mp.email);
-    if (meuble && emailMeuble) {
-      const article = articleMeuble(meuble.nom);
-      parts.push(`${article}${meuble.nom.toLowerCase()} ${deEmail(emailMeuble.nom)}`);
+    const key = `${mp.meuble}|${mp.email}`;
+    const existing = groupes.get(key);
+    if (existing) {
+      existing.count++;
+    } else {
+      const meuble = getMeuble(mp.meuble);
+      const emailMeuble = getEmail(mp.email);
+      if (meuble && emailMeuble) {
+        groupes.set(key, { meuble: mp.meuble, nom: meuble.nom, email: emailMeuble.nom, count: 1 });
+      }
+    }
+  }
+  for (const g of groupes.values()) {
+    if (g.count === 1) {
+      const article = articleMeuble(g.nom);
+      parts.push(`${article}${g.nom.toLowerCase()} ${deEmail(g.email)}`);
+    } else {
+      const nombres = ['', '', 'deux', 'trois', 'quatre', 'cinq', 'six'];
+      const nb = nombres[g.count] ?? `${g.count}`;
+      const pluriel = plurielMeuble(g.nom);
+      parts.push(`à ${nb} ${pluriel} ${deEmail(g.email)}`);
     }
   }
 
@@ -74,7 +95,16 @@ function articlePiece(nom: string): string {
 function articleMeuble(nom: string): string {
   const lower = nom.toLowerCase();
   if (['a', 'e', 'i', 'o', 'u', 'é'].some((v) => lower.startsWith(v))) return "à l'";
+  const feminins = ['fleur de lys', 'étoile', 'tour', 'épée', 'coquille'];
+  if (feminins.some((f) => lower === f)) return 'à la ';
   return 'au ';
+}
+
+function plurielMeuble(nom: string): string {
+  const lower = nom.toLowerCase();
+  if (lower === 'fleur de lys') return 'fleurs de lys';
+  if (lower.endsWith('s') || lower.endsWith('x')) return lower;
+  return lower + 's';
 }
 
 // ========== FUZZY MATCHING ==========

@@ -89,6 +89,8 @@ export function getPositionPixels(position: string): { x: number; y: number } {
     case 'en-pointe': return { x: 300, y: 500 };
     case 'en-canton-dextre-du-chef': return { x: 180, y: 220 };
     case 'en-canton-senestre-du-chef': return { x: 420, y: 220 };
+    case 'en-coeur-chef': return { x: 300, y: 220 };
+    case 'en-coeur-pointe': return { x: 300, y: 470 };
     default: return { x: 300, y: 330 };
   }
 }
